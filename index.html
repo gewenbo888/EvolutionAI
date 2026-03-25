@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EvolutionAI — Evolutionary Theory Simulator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <header>
+            <div class="logo">
+                <svg width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="none" stroke="#4ade80" stroke-width="2"/><path d="M10 22 Q16 6 22 22" fill="none" stroke="#4ade80" stroke-width="2"/><circle cx="16" cy="10" r="3" fill="#4ade80" opacity="0.6"/></svg>
+                <h1>EvolutionAI</h1>
+            </div>
+            <p class="subtitle">Interactive Evolutionary Theory Simulator</p>
+        </header>
+
+        <div class="main-layout">
+            <!-- LEFT PANEL: Controls -->
+            <aside class="panel controls-panel">
+                <h2>Environment</h2>
+
+                <div class="control-group">
+                    <label>Temperature <span id="val-temp" class="val">50</span></label>
+                    <input type="range" id="ctrl-temperature" min="0" max="100" value="50">
+                    <div class="range-labels"><span>Cold</span><span>Hot</span></div>
+                </div>
+
+                <div class="control-group">
+                    <label>Food Abundance <span id="val-food" class="val">60</span></label>
+                    <input type="range" id="ctrl-food" min="0" max="100" value="60">
+                    <div class="range-labels"><span>Scarce</span><span>Abundant</span></div>
+                </div>
+
+                <div class="control-group">
+                    <label>Predation Pressure <span id="val-predation" class="val">30</span></label>
+                    <input type="range" id="ctrl-predation" min="0" max="100" value="30">
+                    <div class="range-labels"><span>None</span><span>Extreme</span></div>
+                </div>
+
+                <div class="control-group">
+                    <label>Mutation Rate <span id="val-mutation" class="val">5</span>%</label>
+                    <input type="range" id="ctrl-mutation" min="1" max="30" value="5">
+                    <div class="range-labels"><span>Low</span><span>High</span></div>
+                </div>
+
+                <div class="control-group">
+                    <label>Terrain</label>
+                    <select id="ctrl-terrain">
+                        <option value="plains">Plains</option>
+                        <option value="forest">Forest</option>
+                        <option value="desert">Desert</option>
+                        <option value="arctic">Arctic</option>
+                        <option value="ocean">Ocean</option>
+                    </select>
+                </div>
+
+                <h2>Simulation</h2>
+                <div class="btn-row">
+                    <button id="btn-start" class="btn btn-primary">Start</button>
+                    <button id="btn-pause" class="btn" disabled>Pause</button>
+                    <button id="btn-reset" class="btn btn-danger">Reset</button>
+                </div>
+                <div class="control-group">
+                    <label>Speed <span id="val-speed" class="val">1</span>x</label>
+                    <input type="range" id="ctrl-speed" min="1" max="10" value="1">
+                </div>
+
+                <h2>Events</h2>
+                <div class="btn-row events-row">
+                    <button class="btn btn-event" data-event="meteor">Meteor</button>
+                    <button class="btn btn-event" data-event="ice-age">Ice Age</button>
+                    <button class="btn btn-event" data-event="plague">Plague</button>
+                    <button class="btn btn-event" data-event="radiation">Radiation Burst</button>
+                </div>
+            </aside>
+
+            <!-- CENTER: Simulation Canvas -->
+            <main class="simulation-area">
+                <div class="canvas-wrapper">
+                    <canvas id="world-canvas"></canvas>
+                    <div class="gen-overlay">
+                        <span>Generation: <strong id="gen-counter">0</strong></span>
+                        <span>Population: <strong id="pop-counter">0</strong></span>
+                        <span>Species: <strong id="species-counter">0</strong></span>
+                    </div>
+                </div>
+
+                <!-- Theory Cards -->
+                <div class="theory-cards">
+                    <div class="card active" data-theory="selection">
+                        <h3>Natural Selection</h3>
+                        <p>Organisms with favorable traits survive and reproduce more successfully.</p>
+                        <div class="card-indicator" id="ind-selection"></div>
+                    </div>
+                    <div class="card" data-theory="mutation">
+                        <h3>Mutation</h3>
+                        <p>Random genetic changes introduce variation into the population.</p>
+                        <div class="card-indicator" id="ind-mutation"></div>
+                    </div>
+                    <div class="card" data-theory="drift">
+                        <h3>Genetic Drift</h3>
+                        <p>Random events cause allele frequency changes, especially in small populations.</p>
+                        <div class="card-indicator" id="ind-drift"></div>
+                    </div>
+                    <div class="card" data-theory="speciation">
+                        <h3>Speciation</h3>
+                        <p>Populations diverge into distinct species through accumulated differences.</p>
+                        <div class="card-indicator" id="ind-speciation"></div>
+                    </div>
+                    <div class="card" data-theory="adaptation">
+                        <h3>Adaptation</h3>
+                        <p>Populations shift traits to better fit their environment over generations.</p>
+                        <div class="card-indicator" id="ind-adaptation"></div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- RIGHT PANEL: Data -->
+            <aside class="panel data-panel">
+                <h2>Population Analytics</h2>
+                <canvas id="chart-population" height="160"></canvas>
+
+                <h2>Trait Distribution</h2>
+                <canvas id="chart-traits" height="160"></canvas>
+
+                <h2>Fitness Landscape</h2>
+                <canvas id="chart-fitness" height="140"></canvas>
+
+                <h2>Species Tree</h2>
+                <div id="phylo-tree" class="phylo-container"></div>
+
+                <h2>Event Log</h2>
+                <div id="event-log" class="event-log"></div>
+            </aside>
+        </div>
+    </div>
+
+    <script src="evolution.js"></script>
+</body>
+</html>
